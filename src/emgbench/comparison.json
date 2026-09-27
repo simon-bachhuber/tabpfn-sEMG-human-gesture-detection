@@ -1,0 +1,58 @@
+{
+  "name": "unseen-users-40-4",
+  "selection_seed": 42,
+  "selection_note": "Held-out IDs were drawn before evaluation, excluding development participants 03 and 04 from selection.",
+  "train_subjects": ["03", "04", "05", "06", "07", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "22", "23", "25", "26", "27", "29", "30", "31", "33", "35", "36", "38", "42", "43", "45", "46", "47", "48", "49", "50", "51", "53", "54"],
+  "test_subjects": ["08", "24", "34", "39"],
+  "demo": {"training_subjects": ["03", "04", "05", "06"]},
+  "sessions_per_subject": 2,
+  "trajectories_per_session": 3,
+  "test_calibration_rows": 0,
+  "mask_scope": "recording",
+  "aggregation": "Compute metrics per held-out participant, pooling both days, then average the four participants equally.",
+  "signal": {
+    "profile": "authors_2019_v1",
+    "nominal_sample_rate_hz": 5120,
+    "filter_sample_rate_hz": 5124.07211903,
+    "window_samples": 2500,
+    "hop_samples": 1250,
+    "channels": 24,
+    "label_column": "TRAJ_GT",
+    "label_position": "window_endpoint",
+    "feature_thresholds": {"ZC": 30, "SSC": 16, "WAMP": 10},
+    "transition_mask": {"start_before": 2, "start_after": 1, "end_before": 0, "end_after": 0, "pause_before": 0, "pause_after": 4}
+  },
+  "representations": {
+    "RMS": ["RMS"],
+    "Du": ["WL", "ZC", "SSC", "IAV", "VAR", "WAMP"]
+  },
+  "comparisons": {
+    "svm-rms": {
+      "label": "SVM + RMS",
+      "model": "SVM",
+      "representation": "RMS",
+      "run": "unseen40-svm-rms",
+      "parameters": {"C": 50.0, "kernel": "rbf", "degree": 3, "gamma": "auto", "coef0": 0.0, "shrinking": true, "probability": false, "tol": 0.001, "cache_size": 200, "class_weight": null, "verbose": false, "max_iter": -1, "decision_function_shape": "ovr", "random_state": null}
+    },
+    "lda-du": {
+      "label": "LDA + Du",
+      "model": "LDA",
+      "representation": "Du",
+      "run": "unseen40-lda-du",
+      "parameters": {"solver": "svd", "shrinkage": null, "priors": null, "n_components": null, "store_covariance": false, "tol": 0.0001}
+    },
+    "tabpfn-du": {
+      "label": "TabPFN + Du",
+      "model": "TabPFN",
+      "representation": "Du",
+      "run": "unseen40-tabpfn-du",
+      "parameters": {"version": "v3.5", "n_estimators": 8, "random_state": 42}
+    }
+  },
+  "upstream": {
+    "putemg_examples": "48554520b69584cad48530e9339cec37a457555b",
+    "putemg_features": "c2ada7c13b468771f93c0ccf96fd0091ed6eb195",
+    "biolab_utilities": "c032e37535e696c028ae74bc4fdaea01af0d8f81",
+    "pyeeg": "e5d34f8e8dfd976b3c52e6c58f80306028275798"
+  }
+}

@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "putemg-tabpfn"
+version = "0.2.0"
+description = "SVM/RMS, LDA/Du, and TabPFN/Du on a frozen putEMG 40/4 split"
+readme = "readme.md"
+requires-python = ">=3.12"
+license = "Apache-2.0"
+license-files = ["LICENCE.md"]
+dependencies = [
+    "numpy==2.5.3",
+    "pandas==2.3.3",
+    "scipy==1.18.1",
+    "scikit-learn==1.7.2",
+    "joblib==1.6.0",
+    "python-dotenv==1.2.3",
+    "tabpfn-client==0.6.0",
+    "tables==3.11.1",
+    "pyarrow==25.0.1",
+    "httpx==0.28.1",
+    "fastapi==0.141.1",
+    "uvicorn==0.53.0",
+    "matplotlib==3.11.2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest==9.1.1", "ruff==0.16.8"]
+browser = ["playwright==1.63.0"]
+
+[project.scripts]
+emgbench = "emgbench.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+emgbench = ["comparison.json", "web/*.html", "web/*.css", "web/*.js"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+target-version = "py312"
+extend-exclude = ["data", "artifacts", "build", "dist"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]

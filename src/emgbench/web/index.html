@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>putEMG · Replay Lab</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <script src="/assets/app.js" defer></script>
+</head>
+<body>
+  <main>
+    <header class="topbar">
+      <div><div class="eyebrow">SIGNALS → GESTURES</div><h1>putEMG <span>Replay Lab</span></h1></div>
+      <div class="badge"><i></i> <span id="replay-role-badge">OFFLINE · 40 TRAIN / 4 UNSEEN</span></div>
+    </header>
+    <p class="intro">Explore how forearm muscle activity becomes a hand-gesture prediction. Video is synchronized for inspection; the model receives EMG features only.</p>
+    <section class="controls" aria-label="Replay configuration">
+      <label>Recording<select id="recording"></select></label>
+      <label>Model & representation<select id="model"></select></label>
+      <label>Playback<select id="speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label>
+    </section>
+    <p id="protocol-note" class="protocol-note"></p>
+    <div id="status" role="status">Loading replay artifacts…</div>
+    <section class="hero">
+      <div class="video-card">
+        <div class="panel-heading"><span>RECORDED HAND VIDEO</span><span id="clock">00:00.00</span></div>
+        <div class="video-wrap">
+          <video id="video" controls preload="metadata" playsinline aria-label="Recorded participant hand"></video>
+          <div id="video-label-overlay" class="video-overlay"><span id="overlay-label">Waiting for a window</span><small id="overlay-confidence"></small></div>
+          <div id="video-distribution-overlay" class="video-overlay video-distribution" aria-label="Prediction distribution in video" hidden>
+            <div class="video-distribution-heading">Prediction Distribution</div>
+            <div id="video-probabilities" aria-label="Live class probabilities" hidden></div>
+            <p id="video-distribution-status" class="video-distribution-status">Waiting for a window</p>
+          </div>
+        </div>
+        <div class="video-footer"><span id="session">—</span><button id="next-gesture">Next gesture →</button></div>
+        <div class="video-options">
+          <label class="video-distribution-toggle" for="show-video-distribution">
+            <input id="show-video-distribution" type="checkbox" role="switch" aria-controls="video-distribution-overlay" autocomplete="off">
+            <span>Show Prediction Distribution in video</span>
+          </label>
+        </div>
+      </div>
+      <aside class="prediction-card">
+        <div class="panel-heading"><span id="prediction-heading">EMG PREDICTION</span><span id="score-badge" class="pill">—</span></div>
+        <h2 id="prediction">—</h2>
+        <div class="confidence"><strong id="confidence">—</strong><span id="confidence-caption">Model probability</span></div>
+        <div class="labels"><div><small>VIDEO-DERIVED LABEL</small><b id="truth">—</b></div><div><small>PARTICIPANT PROMPT</small><b id="prompt">—</b></div></div>
+        <div id="probabilities" aria-label="Class probabilities"></div>
+      </aside>
+    </section>
+    <section class="signal-card">
+      <div class="panel-heading"><span>SYNCHRONIZED EMG · ALL 24 CHANNELS · FILTERED ADC UNITS</span></div>
+      <div class="trace-scroll" role="region" aria-label="All 24 EMG channels in eight rows and three columns" tabindex="0">
+        <div class="trace-grid">
+          <section class="trace-band" aria-labelledby="elbow-heading">
+            <h3 id="elbow-heading">Elbow band <span>CH 1–8</span></h3>
+            <canvas id="traces-elbow" aria-label="EMG channels 1 through 8 aligned to the video clock"></canvas>
+          </section>
+          <section class="trace-band" aria-labelledby="middle-heading">
+            <h3 id="middle-heading">Middle band <span>CH 9–16</span></h3>
+            <canvas id="traces-middle" aria-label="EMG channels 9 through 16 aligned to the video clock"></canvas>
+          </section>
+          <section class="trace-band" aria-labelledby="wrist-heading">
+            <h3 id="wrist-heading">Wrist band <span>CH 17–24</span></h3>
+            <canvas id="traces-wrist" aria-label="EMG channels 17 through 24 aligned to the video clock"></canvas>
+          </section>
+        </div>
+      </div>
+      <p class="trace-scroll-hint">Scroll horizontally to view all three electrode bands.</p>
+      <div class="trace-footer"><span><i class="legend-line"></i> Video playhead <i class="legend-window"></i> Latest analysis window</span><span>24 input channels · 2,500-sample window · 1,250-sample hop</span></div>
+    </section>
+    <section class="metrics" aria-label="Current recording metrics">
+      <div><small>ACCURACY</small><strong id="accuracy">—</strong><span id="accuracy-scope">Current held-out recording</span></div>
+      <div><small>MACRO F1</small><strong id="f1">—</strong><span>Eight gesture classes</span></div>
+      <div><small>MACRO RECALL</small><strong id="recall">—</strong><span>Equal class weighting</span></div>
+      <div><small>SCORING COVERAGE</small><strong id="coverage">—</strong><span>Transition / −1 exclusions applied</span></div>
+    </section>
+    <details><summary>Protocol, synchronization & provenance</summary><p id="provenance"></p><p>Labels come from the dataset’s processed video-derived <code>TRAJ_GT</code>. Gray intervals are excluded by the authors’ benchmark mask. Idle is a valid class; unconstrained movements are not mapped to idle. Prediction probabilities are model outputs, not a guarantee of correctness.</p><p>This is offline replay: the authors’ zero-phase filtering uses future samples. Timings in benchmark artifacts measure computation separately from video playback. Signal min/max binning is for display only.</p></details>
+    <footer><span>Dataset: <a href="https://biolab.put.poznan.pl/putemg-dataset/">putEMG · Kaczmarek et al., 2019</a> · CC BY-NC 4.0</span><span>Reproducible EMG-only recognition</span></footer>
+  </main>
+</body>
+</html>
