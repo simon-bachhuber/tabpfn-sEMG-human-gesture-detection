@@ -74,5 +74,8 @@ before publishing this snapshot.
 - **Prior Labs and the TabPFN contributors**:
   [TabPFN](https://docs.priorlabs.ai/) and its hosted inference service.
 
-Project code: **Apache-2.0**. putEMG data, videos, and derived dataset assets:
-**CC BY-NC 4.0**. Upstream code retains its notices; see [LICENCE.md](LICENCE.md).
+## License of putEMG and TabPFN model weights
+
+This project reproduces the putEMG benchmark from https://github.com/biolab-put/putemg_examples which uses MIT License.
+The putEMG data and videos are licensed under Creative Commons Attribution-NonCommercial 4.0 International.
+This project does not relicense putEMG or the TabPFN model weights.
